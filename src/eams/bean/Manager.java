@@ -9,7 +9,7 @@ public class Manager {
 	private long id;
 
 	@NotNull
-	@Size(min = 5, max = 16)
+	@Size(min = 5, max = 25)
 	private String userName;
 
 	@NotNull
