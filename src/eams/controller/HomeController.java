@@ -11,19 +11,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import eams.*;
-import eams.bean.Manager;
-import eams.db.ManagerRepository;
+import eams.bean.User;
+import eams.db.UserRepository;
 
 /**
- * @author luanwf
+ * 用户主页控制类
+ * 
+ * @author lil
+ * @version v1.0
  */
-@Controller // 控制定义
-@RequestMapping("/") // 相应web路径
+@Controller
+@RequestMapping("/")
 public class HomeController {
 
-	@Autowired // 自动注入资源
-	private ManagerRepository managerRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	/**
 	 * 首页
@@ -31,24 +33,52 @@ public class HomeController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(method = GET) // 相应的请求方法
+	@RequestMapping(method = GET)
 	public String home(Model model) {
-		/*
-		 * 依据WebConfig.viewResolver中的
-		 * org.springframework.web.servlet.view.InternalResourceViewResolver定义
-		 * 
-		 * InternalResourceViewResolver resolver = new
-		 * InternalResourceViewResolver();
-		 * resolver.setPrefix("/WEB-INF/views/"); 
-		 * resolver.setSuffix(".jsp");
-		 * 
-		 * 返回相应jsp视图，即返回/WEB-INF/views/home.jsp
-		 * 
-		 */
-		Manager manager  = new Manager("userName", "password");
-		System.out.println("开始存储");
-		managerRepository.save(manager);
-		System.out.println("OK");
 		return "home";
+	}
+
+	/**
+	 * 注册
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/login", method = GET)
+	public String showLoginForm() {
+		return "loginForm";
+	}
+
+	/**
+	 * 登录请求
+	 * 
+	 * @param userName
+	 * @param password
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/login", method = POST)
+	public String processLogin(@RequestParam(value = "userName", defaultValue = "") String userName,
+			@RequestParam(value = "password", defaultValue = "") String password, HttpSession session) {
+		User user = userRepository.findByUserName(userName, password);
+		if (user != null) {
+			session.setAttribute("user", user);
+			return "redirect:/userHome";
+		} else {
+			return "loginError";
+		}
+
+	}
+
+	/**
+	 * 注销
+	 * 
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/logout", method = GET)
+	public String logout(HttpSession session) {
+		session.removeAttribute("user");
+		session.invalidate();
+		return "redirect:/";
 	}
 }

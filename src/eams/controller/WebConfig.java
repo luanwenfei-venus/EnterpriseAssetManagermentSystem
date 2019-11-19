@@ -13,19 +13,12 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
  * webMVC配置
- * @author luanwf
+ * 
+ * @author lil
+ * @version v1.0
  */
 @Configuration
-/*
- * 将@EnableWebMvc添加给@Configuration类来导入SpringMvc的配置；3.自定义MVC配置，
- * 实现接口WebMvcConfigurer或更可能继承WebMvcConfigurerAdapter,并且使用@EnableWebMvc;
- * 
- */
 @EnableWebMvc
-/*
- * 定义扫描的路径从中找出标识了需要装配的类自动装配到spring的bean容器中
- * 
- */
 @ComponentScan("eams.controller")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
@@ -41,6 +34,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		resolver.setSuffix(".jsp");
 		return resolver;
 	}
+
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
@@ -60,6 +54,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		
+		registry.addInterceptor(new ManagerInterceptor())
+				.addPathPatterns(new String[] { "/uselogs", "/uselogs/**", "/user", "/user/**" })//添加拦截
+				.excludePathPatterns("/user/register");// excludePathPatterns 排除拦截
+		registry.addInterceptor(new ManagerInterceptor())
+		.addPathPatterns(new String[] {"/admin/**"})//添加拦截
+		.excludePathPatterns("/admin/login","/admin");// excludePathPatterns 排除拦截
 		super.addInterceptors(registry);
 	}
 

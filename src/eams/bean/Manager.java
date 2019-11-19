@@ -50,5 +50,9 @@ public class Manager {
 		this.userName = userName;
 		this.password = password;
 	}
+
+	public Manager() {
+		// TODO Auto-generated constructor stub
+	}
 	
 }

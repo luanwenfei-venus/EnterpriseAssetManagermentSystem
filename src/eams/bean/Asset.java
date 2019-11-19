@@ -5,6 +5,10 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * @author luanwf
+ */
+
 public class Asset {
 	private long id;
 	
@@ -94,6 +98,15 @@ public class Asset {
 	public Asset() {
 		
 	}
+
+	public Asset(String deviceName, String brand, String deviceType, Date day) {
+		this.deviceName = deviceName;
+		this.brand = brand;
+		this.deviceType = deviceType;
+		this.day = day;
+	}
+
+	
 	
 	
 	

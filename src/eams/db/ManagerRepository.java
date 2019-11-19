@@ -27,4 +27,8 @@ public interface ManagerRepository {
 	Manager findByUserName(String userName);
 	
 	Manager findByUserName(String userName,String password);
+
+	Object findPage(int pageNo, int pageSize);
+
+	void delete(long managerId);
 }
